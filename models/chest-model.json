@@ -1,0 +1,77 @@
+{
+  "name": "Treasure Chest",
+  "description": "3D model of a fantasy treasure chest with opening animation",
+  "animations": [
+    {
+      "name": "open",
+      "duration": 2000,
+      "properties": {
+        "lidRotation": {
+          "from": 0,
+          "to": -120,
+          "easing": "easeInOutQuad"
+        }
+      }
+    },
+    {
+      "name": "close",
+      "duration": 2000,
+      "properties": {
+        "lidRotation": {
+          "from": -120,
+          "to": 0,
+          "easing": "easeInOutQuad"
+        }
+      }
+    },
+    {
+      "name": "idle",
+      "duration": 3000,
+      "properties": {
+        "hover": {
+          "from": 0,
+          "to": 5,
+          "easing": "easeInOutSine"
+        }
+      }
+    }
+  ],
+  "parts": [
+    {
+      "name": "base",
+      "type": "mesh",
+      "material": {
+        "color": "#8B4513",
+        "metalness": 0.3,
+        "roughness": 0.7
+      }
+    },
+    {
+      "name": "lid",
+      "type": "mesh",
+      "material": {
+        "color": "#A0522D",
+        "metalness": 0.4,
+        "roughness": 0.6
+      }
+    },
+    {
+      "name": "lock",
+      "type": "mesh",
+      "material": {
+        "color": "#FFD700",
+        "metalness": 0.8,
+        "roughness": 0.2
+      }
+    },
+    {
+      "name": "gems",
+      "type": "mesh",
+      "material": {
+        "color": "#00FFFF",
+        "metalness": 0.9,
+        "roughness": 0.1
+      }
+    }
+  ]
+}
