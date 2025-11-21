@@ -67,7 +67,6 @@ function monitorPerformance() {
 
 function setupSurfaceScanning() {
     const scanButton = document.getElementById('scan-button');
-    const placeButton = document.getElementById('place-button');
     const openButton = document.getElementById('open-button');
     const instructions = document.getElementById('instructions');
     const chestContainer = document.getElementById('chest-container');
@@ -75,8 +74,7 @@ function setupSurfaceScanning() {
     let surfaceScanned = false;
     let chestPlaced = false;
     
-    // Initially hide place and open buttons
-    placeButton.style.opacity = '0';
+    // Initially hide open button
     openButton.style.opacity = '0';
     
     // Move chest off-screen initially
@@ -88,7 +86,6 @@ function setupSurfaceScanning() {
         surfaceScanned = true;
         scanButton.style.opacity = '0';
         instructions.textContent = 'Point your camera at a surface and tap on the screen to place the chest';
-        // Place button is not needed - user will tap on screen to place
     });
     
     // Setup hit testing for markerless AR
