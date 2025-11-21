@@ -429,15 +429,6 @@
                 }
             });
             
-            // Auto-place chest for demo purposes after 3 seconds if not placed
-            setTimeout(() => {
-                if (!chestPlaced) {
-                    chestContainer.setAttribute('position', '0 0 -3');
-                    openButton.style.opacity = '1';
-                    chestPlaced = true;
-                    document.getElementById('instructions').textContent = 'Treasure chest placed! Tap OPEN to reveal your reward.';
-                }
-            }, 3000);
         }
         
         function openTreasureChest() {
