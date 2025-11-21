@@ -70,7 +70,6 @@ function setupSurfaceScanning() {
     const placeButton = document.getElementById('place-button');
     const openButton = document.getElementById('open-button');
     const instructions = document.getElementById('instructions');
-    const groundPlane = document.getElementById('ground-plane');
     const chestContainer = document.getElementById('chest-container');
     
     let surfaceScanned = false;
@@ -80,6 +79,9 @@ function setupSurfaceScanning() {
     placeButton.style.opacity = '0';
     openButton.style.opacity = '0';
     
+    // Move chest off-screen initially
+    chestContainer.setAttribute('position', '0 -10 0');
+    
     // Scan button event
     scanButton.addEventListener('click', function() {
         // In a real implementation, this would start the AR surface detection
@@ -87,16 +89,21 @@ function setupSurfaceScanning() {
         surfaceScanned = true;
         scanButton.style.opacity = '0';
         placeButton.style.opacity = '1';
-        instructions.textContent = 'Surface scanned! Tap PLACE CHEST to put the treasure chest.';
+        instructions.textContent = 'Surface scanned! Tap on the surface to place the treasure chest.';
     });
     
-    // Place button event
-    placeButton.addEventListener('click', function() {
-        if (surfaceScanned && !chestPlaced) {
-            // Place chest at a default position (in a real app, this would be at a detected surface point)
-            chestContainer.setAttribute('position', '0 0 -3');
+    // Setup hit testing for markerless AR
+    const scene = document.querySelector('a-scene');
+    const groundPlane = document.getElementById('ground-plane');
+    
+    // Add event listener for tap/click to place chest
+    scene.addEventListener('click', function (evt) {
+        if (surfaceScanned && !chestPlaced && evt.detail.intersectedEl === groundPlane) {
+            // Place chest at hit point
+            const point = evt.detail.intersection.point;
+            chestContainer.setAttribute('position', `${point.x} ${point.y} ${point.z}`);
             
-            // Show open button
+            // Hide place button and show open button
             placeButton.style.opacity = '0';
             openButton.style.opacity = '1';
             
@@ -106,6 +113,19 @@ function setupSurfaceScanning() {
             // Mark as placed
             chestPlaced = true;
             window.chestPlaced = true;
+        }
+    });
+    
+    // Add touch support for mobile
+    scene.addEventListener('touchstart', function (evt) {
+        if (evt.touches.length > 0 && surfaceScanned && !chestPlaced) {
+            // Get touch position
+            const touch = evt.touches[0];
+            const mouseEvent = new MouseEvent('click', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            scene.dispatchEvent(mouseEvent);
         }
     });
 }
