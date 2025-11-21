@@ -84,12 +84,11 @@ function setupSurfaceScanning() {
     
     // Scan button event
     scanButton.addEventListener('click', function() {
-        // In a real implementation, this would start the AR surface detection
-        // For now, we'll simulate it by enabling the place button
+        // Enable surface scanning mode
         surfaceScanned = true;
         scanButton.style.opacity = '0';
-        placeButton.style.opacity = '1';
-        instructions.textContent = 'Surface scanned! Tap on the surface to place the treasure chest.';
+        instructions.textContent = 'Point your camera at a surface and tap on the screen to place the chest';
+        // Place button is not needed - user will tap on screen to place
     });
     
     // Setup hit testing for markerless AR
@@ -98,13 +97,21 @@ function setupSurfaceScanning() {
     
     // Add event listener for tap/click to place chest
     scene.addEventListener('click', function (evt) {
-        if (surfaceScanned && !chestPlaced && evt.detail.intersectedEl === groundPlane) {
-            // Place chest at hit point
-            const point = evt.detail.intersection.point;
-            chestContainer.setAttribute('position', `${point.x} ${point.y} ${point.z}`);
+        if (surfaceScanned && !chestPlaced) {
+            let position;
             
-            // Hide place button and show open button
-            placeButton.style.opacity = '0';
+            // Check if we hit the ground plane
+            if (evt.detail.intersectedEl === groundPlane) {
+                // Place chest at hit point
+                position = evt.detail.intersection.point;
+            } else {
+                // Fallback: place chest at a default position in front of the camera
+                position = {x: 0, y: 0, z: -3};
+            }
+            
+            chestContainer.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
+            
+            // Show open button
             openButton.style.opacity = '1';
             
             // Update instructions
